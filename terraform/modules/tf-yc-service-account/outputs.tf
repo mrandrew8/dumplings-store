@@ -1,3 +1,3 @@
-output "sa-static-key" {
-  value = yandex_iam_service_account_static_access_key.sa-static-key.key
+output "k8s-account-id" {
+  value = yandex_iam_service_account.k8s-account.id
 }
