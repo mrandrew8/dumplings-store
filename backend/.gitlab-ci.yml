@@ -12,8 +12,8 @@ variables:
 build-backend-code-job: #задача с именем build-backend-code-job
   stage: build
   rules:
-    changes: 
-    - backend/* #только для изменений в директории backend
+    - changes: 
+      - backend/* #только для изменений в директории backend
   image:
     name: gcr.io/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]
@@ -85,6 +85,5 @@ telegram-notification-backend: #задача с именем telegram-notificati
   needs:
     - build-backend-code-job # прописываем зависимость от джоба с именем build-backend-code-job
 #добавил изменения для проверки
-
 
 

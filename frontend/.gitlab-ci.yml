@@ -11,8 +11,8 @@ variables:
 build-frontend-code-job: #задача с именем build-frontend-code-job
   stage: build
   rules:
-    changes: 
-    - frontend/* #только для изменений в директории frontend
+    - changes: 
+      - frontend/* #только для изменений в директории frontend
   image:
     name: gcr.io/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]
@@ -79,6 +79,6 @@ release:
   script:
     - crane tag $CI_REGISTRY_IMAGE/dunpling-frontend:$CI_COMMIT_SHA latest
   needs:
-    - build-backend-code-job
+    - build-frontend-code-job
 
 
