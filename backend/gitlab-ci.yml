@@ -11,7 +11,7 @@ variables:
 
 build-backend-code-job: #задача с именем build-backend-code-job
   stage: build
-  only:
+  rules:
     changes: 
     - backend/* #только для изменений в директории backend
   image:

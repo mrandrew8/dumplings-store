@@ -10,7 +10,7 @@ variables:
 
 build-frontend-code-job: #задача с именем build-frontend-code-job
   stage: build
-  only:
+  rules:
     changes: 
     - frontend/* #только для изменений в директории frontend
   image:
