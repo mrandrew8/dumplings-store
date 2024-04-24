@@ -25,7 +25,7 @@ build-frontend-code-job: #задача с именем build-frontend-code-job
     - /kaniko/executor
       --context "${CI_PROJECT_DIR}/frontend"
       --dockerfile "${CI_PROJECT_DIR}/frontend/Dockerfile"
-      --destination "${CI_REGISTRY_IMAGE}/dumpling-frontend:$CI_COMMIT_SHA"
+      --destination "${CI_REGISTRY_IMAGE}/dumpling-frontend:$VERSION"
       --build-arg VERSION=$VERSION
       --cache=true
     - echo "$CI_REGISTRY_IMAGE"
@@ -40,12 +40,12 @@ sonarqube-frontend-sast:
     - pwd
     - ls -lah
     - sonar-scanner
-      -Dsonar.projectName=${SONAR_PROJECT_NAME_FRONTEND} 
-      -Dsonar.host.url=${SONAR_HOST_URL_FRONTEND} 
-      -Dsonar.login=${SONAR_LOGIN_FRONTEND}
-      -Dsonar.projectKey=${SONAR_PROJECT_KEY_FRONTEND}
-      -Dsonar.sources=${SONAR_SOURCES_FRONTEND}
-      -Dsonar.qualitygate.wait=true"
+      -Dsonar.projectName="std-024-12-frontend"
+      -Dsonar.host.url="https://sonarqube.praktikum-services.ru"
+      -Dsonar.login="3a1c2fde38192bc083336d644677fdf15fdb7f49"
+      -Dsonar.projectKey="std-024-12-frontend"
+      -Dsonar.sources="."
+      -Dsonar.qualitygate.wait=true
   needs:
     - build-frontend-code-job # прописываем зависимость от джоба с именем build-frontend-code-job
 
