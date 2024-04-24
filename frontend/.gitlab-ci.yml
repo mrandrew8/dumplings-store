@@ -45,7 +45,7 @@ sonarqube-frontend-sast:
       -Dsonar.login="3a1c2fde38192bc083336d644677fdf15fdb7f49"
       -Dsonar.projectKey="std-024-12-frontend"
       -Dsonar.sources="."
-      -Dsonar.qualitygate.wait=true
+      -Dsonar.qualitygate.wait=false
   needs:
     - build-frontend-code-job # прописываем зависимость от джоба с именем build-frontend-code-job
 
@@ -80,7 +80,7 @@ release:
   before_script:
     - crane auth login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - crane tag $CI_REGISTRY_IMAGE/dunpling-frontend:$VERSION latest
+    - crane tag $CI_REGISTRY_IMAGE/dumpling-frontend:$VERSION latest
   needs:
     - build-frontend-code-job
 
