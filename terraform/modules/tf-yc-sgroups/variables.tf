@@ -3,5 +3,5 @@ variable "network_id" {
 } 
 
 variable "v4_cidr_blocks" {
-    type = string
+    type = list
 } 

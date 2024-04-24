@@ -18,7 +18,7 @@ module "tf-yc-sgroups" {
 
 module "tf-yc-k8s-cluster" {
   source = "./modules/tf-yc-k8s-cluster"
-  network_id = module.tf-yc-network.dumpling-network-
+  network_id = module.tf-yc-network.dumpling-network-id
   subnet_id = module.tf-yc-network.dumpling-subnet-id
   security_group_ids = module.tf-yc-sgroups.k8s-public-services-id
   service_account_id = module.tf-yc-service-account.k8s-account-id
