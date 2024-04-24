@@ -1,7 +1,7 @@
 resource "yandex_vpc_security_group" "k8s-public-services" {
   name        = "k8s-public-services"
   description = "Правила группы разрешают подключение к сервисам из интернета. Примените правила только для групп узлов."
-  network_id  = module.tf-yc-network.dumpling-network-id
+  network_id  = var.network_id
   ingress {
     protocol          = "TCP"
     description       = "Правило разрешает проверки доступности с диапазона адресов балансировщика нагрузки. Нужно для работы отказоустойчивого кластера Managed Service for Kubernetes и сервисов балансировщика."
@@ -19,7 +19,7 @@ resource "yandex_vpc_security_group" "k8s-public-services" {
   ingress {
     protocol          = "ANY"
     description       = "Правило разрешает взаимодействие под-под и сервис-сервис. Укажите подсети вашего кластера Managed Service for Kubernetes и сервисов."
-    v4_cidr_blocks    = concat(module.tf-yc-network.dumpling-subnet-v4-cidr-blocks)
+    v4_cidr_blocks    = concat(var.v4-cidr-blocks)
     from_port         = 0
     to_port           = 65535
   }
