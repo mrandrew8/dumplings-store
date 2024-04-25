@@ -6,6 +6,7 @@ resource "yandex_kubernetes_cluster" "k8s-zonal" {
       zone      = "ru-central1-a"
       subnet_id = var.subnet_id
     }
+    public_ip = true
     security_group_ids = [var.security_group_ids]
   }
   service_account_id      = var.service_account_id
