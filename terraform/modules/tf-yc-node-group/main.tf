@@ -10,7 +10,7 @@ resource "yandex_kubernetes_node_group" "k8s-node-group" {
 
     network_interface {
       nat                = true
-      subnet_ids         = var.subnet_id
+      subnet_ids         = [var.subnet_id]
       ipv4_dns_records {
         fqdn        = var.fqdn
         dns_zone_id = var.dns_zone_id

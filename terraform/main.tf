@@ -30,8 +30,8 @@ module "tf-yc-k8s-cluster" {
 module "tf-yc-node-group" {
   source = "./modules/tf-yc-node-group"
   cluster_id  = module.tf-yc-k8s-cluster.k8s-cluster-id
-  subnet_ids = module.tf-yc-network.dumpling-subnet-id
-  fqdn = module.tf-yc-dns.k8s-cluster-id.yandex-dns-zone-name
+  subnet_id = module.tf-yc-network.dumpling-subnet-id
+  fqdn = module.tf-yc-dns.yandex-dns-zone-name
   dns_zone_id = module.tf-yc-dns.yandex-dns-zone-id
 } 
 
