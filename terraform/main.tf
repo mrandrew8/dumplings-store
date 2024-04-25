@@ -33,7 +33,7 @@ module "tf-yc-node-group" {
   subnet_id = module.tf-yc-network.dumpling-subnet-id
   fqdn = module.tf-yc-dns.yandex-dns-zone-name
   dns_zone_id = module.tf-yc-dns.yandex-dns-zone-id
-  depends_on = [/modules/tf-yc-dns]
+  depends_on = [modules/tf-yc-dns]
 } 
 
 module "tf-yc-dns" {
