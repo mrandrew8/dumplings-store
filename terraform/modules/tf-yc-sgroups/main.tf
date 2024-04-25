@@ -42,4 +42,25 @@ resource "yandex_vpc_security_group" "k8s-public-services" {
     from_port         = 0
     to_port           = 65535
   }
+
+  ingress {
+    protocol       = "TCP"
+    description    = "Правило разрешает подключение к API Kubernetes через порт 6443 из указанной сети."
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 6443
+  }
+
+  ingress {
+    protocol       = "TCP"
+    description    = "Правило разрешает подключение к API Kubernetes через порт 443 из указанной сети."
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 443
+  }
+
+  ingress {
+    protocol       = "TCP"
+    description    = "Правило разрешает подключение к узлам по SSH с указанных IP-адресов."
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 22
+  }
 }

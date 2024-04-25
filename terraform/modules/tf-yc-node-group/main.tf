@@ -9,6 +9,7 @@ resource "yandex_kubernetes_node_group" "k8s-node-group" {
     network_interface {
       nat                = true
       subnet_ids         = [var.subnet_id]
+      security_group_ids = [var.security_group_ids]
     }
 
     resources {
