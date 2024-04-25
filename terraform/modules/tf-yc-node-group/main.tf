@@ -1,8 +1,6 @@
 resource "yandex_kubernetes_node_group" "k8s-node-group" {
   cluster_id  = var.cluster_id
   name        = "k8s-node-group"
-  description = "description"
-  version     = "1.17"
 
 
   instance_template {
