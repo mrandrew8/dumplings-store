@@ -31,14 +31,9 @@ module "tf-yc-node-group" {
   source = "./modules/tf-yc-node-group"
   cluster_id  = module.tf-yc-k8s-cluster.k8s-cluster-id
   subnet_id = module.tf-yc-network.dumpling-subnet-id
-  fqdn = module.tf-yc-dns.yandex-dns-zone-name
-  dns_zone_id = module.tf-yc-dns.yandex-dns-zone-id
-  depends_on = [module.tf-yc-dns]
 } 
 
-module "tf-yc-dns" {
-  source = "./modules/tf-yc-dns"
-} 
+
 
 
 
