@@ -34,6 +34,11 @@ module "tf-yc-node-group" {
   security_group_ids = module.tf-yc-sgroups.k8s-public-services-id
 } 
 
+module "tf-yc-dns" {
+  source = "./modules/tf-yc-dns"
+} 
+
+
 
 
 
