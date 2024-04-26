@@ -38,7 +38,7 @@ data:
           }
 
           location ~ /(products|categories|orders|auth/whoami|metrics) {
-            proxy_pass http://dumpling-backend:8081;
+            proxy_pass http://backend:8081;
           }
 
       }
