@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: gitlab.praktikum-services.ru:5050/std-024-12/dumplings-store/dumplings-backend:latest
+          image: gitlab.praktikum-services.ru:5050/std-024-12/dumplings-store/dumpling-backend:latest
           imagePullPolicy: Always # image извлекается всегда
           ports:
             - name: backend
