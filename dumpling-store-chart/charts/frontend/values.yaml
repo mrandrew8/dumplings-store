@@ -1,0 +1,33 @@
+frontend:
+  deployment:
+    replicas: 1
+    revisionHistoryLimit: 15
+    image: gitlab.praktikum-services.ru:5050/std-024-12/dumplings-store/dumpling-frontend:latest
+    imagePullPolicy: Always
+    containerPort: 80
+    volumeMounts:
+      name: nginx-conf
+      mountPath: /etc/nginx/nginx.conf
+      subPath: nginx.conf
+      readOnly: true
+    volumes:
+      name: nginx-conf
+    configMap:
+      name: nginx-conf
+      items:
+      key: nginx.conf
+      path: nginx.conf
+  ingress:
+    ingressClassName: "nginx"
+    host: "nikolaev-andrey-24.k8s.praktikum-services.tech"
+    service_name: frontend
+    service_port_number: 80
+  service:
+    type: ClusterIP
+    port: 80
+    protocol: TCP
+    targetPort: 80
+
+backend:
+  app: backend
+  port: 8081
