@@ -1,5 +1,5 @@
 resource "yandex_dns_zone" "dumpling-zone1" {
-  name        = "my-public-zone"
+  name        = "dumpling-zone1"
   description = "Test public zone"
 
   labels = {
