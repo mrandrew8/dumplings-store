@@ -14,4 +14,6 @@ resource "yandex_dns_recordset" "rs1" {
   zone_id = yandex_dns_zone.dumpling-zone1.id
   name    = "test.example-public.com."
   type    = "A"
+  ttl     = 200
+  data    = ["10.1.0.1"]
 }
