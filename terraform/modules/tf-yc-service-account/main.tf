@@ -38,7 +38,7 @@ resource "yandex_resourcemanager_folder_iam_member" "editor" {
   member    = "serviceAccount:${yandex_iam_service_account.k8s-account.id}"
 }
 
-resource "yandex_resourcemanager_folder_iam_member" "load-balancer.admin" {
+resource "yandex_resourcemanager_folder_iam_member" "load-balancer-admin" {
   # Сервисному аккаунту назначается роль "load-balancer.admin".
   folder_id = "b1gi8bi93n7ltsrefcih"
   role      = "load-balancer.admin"
