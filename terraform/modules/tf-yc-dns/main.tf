@@ -6,14 +6,14 @@ resource "yandex_dns_zone" "dumpling-zone1" {
     label1 = "test-public"
   }
 
-  zone    = "example-public2.com."
+  zone    = "dumlping-store24.ru."
   public  = true
 }
 
 resource "yandex_dns_recordset" "rs1" {
   zone_id = yandex_dns_zone.dumpling-zone1.id
-  name    = "dumpling.example-public2.com."
+  name    = "dumplings.dumlping-store24.ru."
   type    = "A"
   ttl     = 200
-  data    = ["10.1.0.1"]
+  data    = var.data
 }
