@@ -38,6 +38,11 @@ module "tf-yc-dns" {
   source = "./modules/tf-yc-dns"
 } 
 
+module "tf-yc-static-public-ip" {
+  source = "./modules/tf-yc-static-public-ip"
+} 
+
+
 
 
 
