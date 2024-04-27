@@ -15,5 +15,5 @@ resource "yandex_dns_recordset" "rs1" {
   name    = "dumplings.dumlping-store24.ru."
   type    = "A"
   ttl     = 200
-  data    = var.data
+  data    = [var.data]
 }
