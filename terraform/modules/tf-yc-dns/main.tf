@@ -9,11 +9,3 @@ resource "yandex_dns_zone" "dumpling-zone1" {
   zone    = "dumlping-store24.ru."
   public  = true
 }
-
-resource "yandex_dns_recordset" "rs1" {
-  zone_id = yandex_dns_zone.dumpling-zone1.id
-  name    = "dumplings.dumlping-store24.ru."
-  type    = "A"
-  ttl     = 200
-  data    = [var.data]
-}
