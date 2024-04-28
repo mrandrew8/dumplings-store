@@ -36,8 +36,6 @@ module "tf-yc-node-group" {
 
 module "tf-yc-dns" {
   source = "./modules/tf-yc-dns"
-  data = module.tf-yc-static-public-ip.static-public-ip-address
-  depends_on = [module.tf-yc-static-public-ip]
 } 
 
 module "tf-yc-static-public-ip" {
