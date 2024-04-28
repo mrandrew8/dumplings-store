@@ -11,8 +11,8 @@ resource "yandex_dns_zone" "dumpling-zone1" {
 }
 
 resource "yandex_dns_recordset" "rs1" {
-  zone_id = yandex_dns_zone.zone1.id
-  name    = "test.example-public.com."
+  zone_id = yandex_dns_zone.dumpling-zone1.id
+  name    = "dumlping-store24.ru."
   type    = "A"
   ttl     = 200
   data    = [var.data]
