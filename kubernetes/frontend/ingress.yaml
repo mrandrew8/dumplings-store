@@ -1,12 +1,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: minimal-ingress
+  name: frontend
   annotations:
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/cluster-issuer: "yc-clusterissuer"
 spec:
-  ingressClassName: "nginx"
   tls:
     - hosts:
       - "dumlping-store24.ru"
