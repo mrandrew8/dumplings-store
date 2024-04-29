@@ -1,7 +1,7 @@
 resource "yandex_vpc_security_group" "k8s-public-services" {
   name        = "k8s-public-services"
   description = "Правила группы разрешают подключение к сервисам из интернета. Примените правила только для групп узлов."
-  network_id  = module.tf-yc-network.dumpling-network-id
+  network_id  = var.network_id
   ingress {
     protocol          = "TCP"
     description       = "Правило разрешает проверки доступности с диапазона адресов балансировщика нагрузки. Нужно для работы отказоустойчивого кластера Managed Service for Kubernetes и сервисов балансировщика."
@@ -19,7 +19,7 @@ resource "yandex_vpc_security_group" "k8s-public-services" {
   ingress {
     protocol          = "ANY"
     description       = "Правило разрешает взаимодействие под-под и сервис-сервис. Укажите подсети вашего кластера Managed Service for Kubernetes и сервисов."
-    v4_cidr_blocks    = concat(module.tf-yc-network.dumpling-subnet-v4-cidr-blocks)
+    v4_cidr_blocks    = concat(var.v4_cidr_blocks)
     from_port         = 0
     to_port           = 65535
   }
@@ -32,7 +32,7 @@ resource "yandex_vpc_security_group" "k8s-public-services" {
     protocol          = "TCP"
     description       = "Правило разрешает входящий трафик из интернета на диапазон портов NodePort. Добавьте или измените порты на нужные вам."
     v4_cidr_blocks    = ["0.0.0.0/0"]
-    from_port         = 30000
+    from_port         = 0
     to_port           = 32767
   }
   egress {
@@ -41,5 +41,26 @@ resource "yandex_vpc_security_group" "k8s-public-services" {
     v4_cidr_blocks    = ["0.0.0.0/0"]
     from_port         = 0
     to_port           = 65535
+  }
+
+  ingress {
+    protocol       = "TCP"
+    description    = "Правило разрешает подключение к API Kubernetes через порт 6443 из указанной сети."
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 6443
+  }
+
+  ingress {
+    protocol       = "TCP"
+    description    = "Правило разрешает подключение к API Kubernetes через порт 443 из указанной сети."
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 443
+  }
+
+  ingress {
+    protocol       = "TCP"
+    description    = "Правило разрешает подключение к узлам по SSH с указанных IP-адресов."
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 22
   }
 }

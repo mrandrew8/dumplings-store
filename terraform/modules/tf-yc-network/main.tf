@@ -1,10 +1,10 @@
 resource "yandex_vpc_network" "dumpling-network" {
-  name = "dumpling-network"
+  name = var.network_name
 }
 
 resource "yandex_vpc_subnet" "dumpling-subnet" {
-  name = "dumpling-subnet"
-  v4_cidr_blocks = ["10.1.0.0/16"]
-  zone           = "ru-central1-a"
+  name = var.subnet_name
+  v4_cidr_blocks = [var.v4_cidr_blocks]
+  zone           = var.zone
   network_id     = yandex_vpc_network.dumpling-network.id
 }
