@@ -18,6 +18,6 @@ variable "deletion_protection" {
 
 variable "zone_id" {
   default = "ru-central1-a"
-  type = bool
+  type = string
   description = "zone_id"
 }
