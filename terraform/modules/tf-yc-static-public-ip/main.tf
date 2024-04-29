@@ -1,8 +1,8 @@
 resource "yandex_vpc_address" "static-public-ip" {
-  name = "static-public-ip"
-  deletion_protection = true
-  folder_id = "b1gi8bi93n7ltsrefcih"
+  name = var.name
+  deletion_protection = var.deletion_protection
+  folder_id = var.folder_id
   external_ipv4_address {
-    zone_id = "ru-central1-a"
+    zone_id = var.zone_id
   }
 }
