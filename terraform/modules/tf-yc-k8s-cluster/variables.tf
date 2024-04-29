@@ -22,3 +22,18 @@ variable "key_id" {
     type = string
 }
 
+variable "name" {
+    default = "k8s-zonal"
+    type = string
+}
+
+variable "zone" {
+    default = "ru-central1-a"
+    type = string
+}
+
+variable "public_ip" {
+    default = true
+    type = bool
+}
+

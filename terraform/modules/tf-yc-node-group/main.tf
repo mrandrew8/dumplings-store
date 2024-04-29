@@ -1,10 +1,10 @@
 resource "yandex_kubernetes_node_group" "k8s-node-group" {
   cluster_id  = var.cluster_id
-  name        = "k8s-node-group"
+  name        = var.name
 
 
   instance_template {
-    platform_id = "standard-v2"
+    platform_id = var.platform_id
 
     network_interface {
       nat                = true
@@ -13,13 +13,13 @@ resource "yandex_kubernetes_node_group" "k8s-node-group" {
     }
 
     resources {
-      memory = 2
-      cores  = 2
+      memory = var.memory
+      cores  = var.cores
     }
 
     boot_disk {
       type = "network-hdd"
-      size = 64
+      size = var.size
     }
 
     scheduling_policy {
@@ -27,21 +27,21 @@ resource "yandex_kubernetes_node_group" "k8s-node-group" {
     }
 
     container_runtime {
-      type = "containerd"
+      type = var.container_runtime
     }
   }
 
   scale_policy {
     auto_scale {
-      min     = 1
-      max     = 3
-      initial = 1
+      min     = var.min
+      max     = var.max
+      initial = var.initial
     }
   }
 
   allocation_policy {
     location {
-      zone = "ru-central1-a"
+      zone = var.zone
     }
   }
 

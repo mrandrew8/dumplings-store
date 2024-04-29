@@ -1,12 +1,12 @@
 resource "yandex_dns_zone" "dumpling-zone1" {
-  name        = "dumpling-zone1"
-  description = "Test public zone"
+  name        = var.name
+  description = var.description
 
   labels = {
-    label1 = "test-public"
+    label1 = var.label1
   }
 
-  zone    = "dumlping-store24.ru."
-  public  = true
+  zone    = var.zone
+  public  = var.public
 }
 
