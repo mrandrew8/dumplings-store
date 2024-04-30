@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment # тип сущности
+metadata: # метаданные
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  revisionHistoryLimit: 15
+  # Стратегия развёртывания. Recreate — удалит сначала все старые Pod'ы 
+  # Есть и более гибкая стратегии, например, RollingUpdate, которая будет обновлять Pod'ы порциями  
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1 #максимальное количество одновременно неработающих Pod'ов в процессе обновления
+      maxSurge: 20% #максимальное количество Pod'ов, которое может быть создано сверх указанного количества Pod'ов
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: gitlab.praktikum-services.ru:5050/std-024-12/dumplings-store/dumpling-backend:latest
+          imagePullPolicy: Always # image извлекается всегда
+          ports:
+            - name: backend
+              containerPort: 8081
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            timeoutSeconds: 1
+            failureThreshold: 6
+      imagePullSecrets:
+       - name: docker-config-secret 

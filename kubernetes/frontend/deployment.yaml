@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment # тип сущности
+metadata: # метаданные
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  revisionHistoryLimit: 15
+  # Стратегия развёртывания. Recreate — удалит сначала все старые Pod'ы 
+  # Есть и более гибкая стратегии, например, RollingUpdate, которая будет обновлять Pod'ы порциями  
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: gitlab.praktikum-services.ru:5050/std-024-12/dumplings-store/dumpling-frontend:latest
+          imagePullPolicy: Always # image извлекается всегда
+          # env:
+          #   - name: VAULT_HOST
+          #     value: 51.250.8.146
+          #   - name: VAULT_TOKEN
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: vault
+          #         key: vault_token
+          ports:
+            - name: frontend
+              containerPort: 80
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx-conf
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+      imagePullSecrets:
+       - name: docker-config-secret
