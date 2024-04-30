@@ -4,7 +4,7 @@ metadata:
   name: {{ .Chart.Name }}
   annotations:
     kubernetes.io/ingress.class: {{  .Values.frontend.ingress.ingressClassName  }}
-    cert-manager.io/cluster-issuer: {{  .Values.frontend.ingress.cluster-issuer  }}
+    cert-manager.io/cluster-issuer: {{  .Values.frontend.ingress.cluster_issuer  }}
 spec:
   tls:
     - hosts:

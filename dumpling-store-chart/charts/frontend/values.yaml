@@ -19,7 +19,7 @@ frontend:
       path: nginx.conf
   ingress:
     ingressClassName: "nginx"
-    cluster-issuer: "yc-clusterissuer"
+    cluster_issuer: "yc-clusterissuer"
     host: "dumlping-store24.ru"
     secretName: letsencrypt-secret
     service_port_number: 80
