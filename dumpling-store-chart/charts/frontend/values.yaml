@@ -19,8 +19,9 @@ frontend:
       path: nginx.conf
   ingress:
     ingressClassName: "nginx"
-    host: "nikolaev-andrey-24.k8s.praktikum-services.tech"
-    service_name: frontend
+    cluster-issuer: "yc-clusterissuer"
+    host: "dumlping-store24.ru"
+    secretName: letsencrypt-secret
     service_port_number: 80
   service:
     type: ClusterIP
