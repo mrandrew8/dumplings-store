@@ -39,4 +39,4 @@ spec:
             timeoutSeconds: {{  .Values.backend.deployment.timeoutSeconds  }}
             failureThreshold: {{  .Values.backend.deployment.failureThreshold  }}
       imagePullSecrets:
-       - name: docker-config-secret 
+       - name: docker-config-secret-backend
