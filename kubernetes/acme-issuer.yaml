@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: yc-clusterissuer
+  namespace: cert-manager
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: nikolaevandronik@yandex.ru
+    privateKeySecretRef:
+      name: letsencrypt-secret
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
