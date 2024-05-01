@@ -14,7 +14,7 @@ chart-realise:
   image: alpine/helm:3.13.2
   script:   
     - ls
-    - helm package backend --version ${VERSION}
+    - helm package backend-chart --version ${VERSION}
     - ls
     # - curl -u std-024-12:E5h3x9Xk https://nexus.praktikum-services.tech/repository/dumplings_store_nikolaev/ --upload-file dumpling-store-${VERSION}.tgz
 
