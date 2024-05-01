@@ -33,7 +33,7 @@ chart-deploy:
     - echo "$kube_cert" | base64 -d >> ~/.kube/ca.pem
     - chmod -R 700 ~/.kube
     - cat ~/.kube/config
-    - KUBECONFIG= ~/.kube/config
+    - export KUBECONFIG= ~/.kube/config
   script:   
     - ls 
     - echo ${VERSION}
