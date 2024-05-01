@@ -30,7 +30,7 @@ chart-deploy:
     - mkdir -p ~/.kube/
     - echo $kubeconfig
     - echo "$kubeconfig" >> ~/.kube/config #создаем конфиг куба из меременной гитлаба
-    - echo $kube_cert >> ~/.kube/cert.crt
+    - echo $kube_cert >> ~/.kube/ca.pem
     - chmod -R 700 ~/.kube
     - cat ~/.kube/config
   script:   
