@@ -33,11 +33,12 @@ chart-deploy:
     - echo "$kube_cert" | base64 -d >> ~/.kube/ca.pem
     - chmod -R 700 ~/.kube
     - cat ~/.kube/config
-    - export KUBECONFIG=/root/.kube/config
+    - export KUBECONFIG=~/.kube/config
   script:   
     - ls 
     - echo ${VERSION}
     - cat ~/.kube/config
+    - kubectl get namespaces
     - helm upgrade --atomic --install backend-chart https://nexus.praktikum-services.tech/repository/dumplings_store_nikolaev/backend-${VERSION}.tgz --username=std-024-12 --password=E5h3x9Xk
     - sleep 30
     - helm list
