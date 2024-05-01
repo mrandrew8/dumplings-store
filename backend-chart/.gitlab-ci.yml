@@ -28,9 +28,8 @@ chart-deploy:
   image: alpine/helm:3.13.2
   before_script:
     - mkdir -p ~/.kube/
-    - echo $kubeconfig
-    - echo "$kubeconfig" >> ~/.kube/config #создаем конфиг куба из меременной гитлаба
-    - echo $kube_cert >> ~/.kube/ca.pem
+    - echo "$kubeconfig" | base64 -d >> ~/.kube/config #создаем конфиг куба из меременной гитлаба
+    - echo "$kube_cert" | base64 -d >> ~/.kube/ca.pem
     - chmod -R 700 ~/.kube
     - cat ~/.kube/config
   script:   
