@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment # тип сущности
+metadata: # метаданные
+  name: {{ .Chart.Name }}
+  labels:
+    app: {{ .Chart.Name }}
+spec:
+  replicas: {{  .Values.frontend.deployment.replicas  }}
+  revisionHistoryLimit: {{  .Values.frontend.deployment.revisionHistoryLimit  }}
+  # Стратегия развёртывания. Recreate — удалит сначала все старые Pod'ы 
+  # Есть и более гибкая стратегии, например, RollingUpdate, которая будет обновлять Pod'ы порциями  
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{  .Values.frontend.deployment.image  }}
+          imagePullPolicy: Always # image извлекается всегда
+          ports:
+            - name: {{ .Chart.Name }}
+              containerPort: {{  .Values.frontend.deployment.containerPort  }}
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx-conf
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+      imagePullSecrets:
+       - name: docker-config-secret-frontend
