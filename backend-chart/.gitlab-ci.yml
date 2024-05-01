@@ -15,6 +15,7 @@ chart-realise:
   script:   
     - ls
     - helm package backend-chart --version ${VERSION}
+    - echo ${VERSION}
     - ls
     - curl -u std-024-12:E5h3x9Xk https://nexus.praktikum-services.tech/repository/dumplings_store_nikolaev/ --upload-file backend-${VERSION}.tgz
 
@@ -34,7 +35,8 @@ chart-deploy:
     - cat ~/.kube/config
   script:   
     - ls 
-    - helm upgrade --atomic --install backend-chart https://nexus.praktikum-services.tech/repository/dumplings_store_nikolaev/backend/backend-chart-${VERSION}.tgz --username=std-024-12 --password=E5h3x9Xk
+    - echo ${VERSION}
+    - helm upgrade --atomic --install backend-chart https://nexus.praktikum-services.tech/repository/dumplings_store_nikolaev/backend-chart-${VERSION}.tgz --username=std-024-12 --password=E5h3x9Xk
     - sleep 30
     - helm list
     - kubectl get all 
