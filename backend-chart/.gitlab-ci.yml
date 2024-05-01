@@ -34,7 +34,7 @@ chart-deploy:
     - cat ~/.kube/config
   script:   
     - ls 
-    - helm upgrade --atomic --install backend-chart https://nexus.praktikum-services.tech/repository/dumplings_store_nikolaev/backend-chart-${VERSION}.tgz --username std-024-12 --password E5h3x9Xk
+    - helm upgrade --atomic --install backend-chart https://nexus.praktikum-services.tech/repository/dumplings_store_nikolaev/backend/backend-chart-${VERSION}.tgz --username=std-024-12 --password=E5h3x9Xk
     - sleep 30
     - helm list
     - kubectl get all 
