@@ -46,7 +46,7 @@ telegram-notification-backend: #задача с именем telegram-notificati
   stage: notify #этап уведомлений
   only:
     changes:
-    - backend-chart/* #только для изменений в директории backend
+    - backend-chart/**/* #только для изменений в директории backend
     variables: #РАСКОМЕНТИТЬ НЕ ЗАБУДЬ ЭТУ СТРОКУ И СЛЕДУЮЩУЮ!!!!!!!!!!!!
     - $CI_COMMIT_MESSAGE =~ /send notification/ # только для изменений содержащих в сообщении коммита "send notification"
   script:
