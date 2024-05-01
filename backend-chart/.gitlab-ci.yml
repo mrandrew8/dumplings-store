@@ -34,7 +34,7 @@ chart-deploy:
     - cat ~/.kube/config
   script:   
     - ls 
-    - helm upgrade --atomic --instal backend-chart https://nexus.praktikum-services.tech/repository/dumplings_store_nikolaev/backend-chart-${VERSION}.tgz
+    - helm upgrade --atomic --install backend-chart https://nexus.praktikum-services.tech/repository/dumplings_store_nikolaev/backend-chart-${VERSION}.tgz
     - sleep 30
     - helm list
     - kubectl get all 
