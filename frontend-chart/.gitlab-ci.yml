@@ -31,9 +31,10 @@ chart-deploy:
   script:   
     - ls # дебажим
     - echo ${VERSION} # дебажим
-    - cat ~/.kube/config # дебажим
+    - export VERSION=${VERSION}
+    # - cat ~/.kube/config # дебажим
     # - kubectl get namespaces
-    - helm upgrade --atomic --install frontend-chart ${nexus_repo_url}frontend-${VERSION}.tgz --namespace default --username=${nexus_user} --password=${nexus_pass} # обновляем на новую версию из nexus реппозитория
+    - helm upgrade --atomic --install frontend-chart ${nexus_repo_url}frontend-${VERSION}.tgz --namespace default --username=${nexus_user} --password=${nexus_pass} --set frontend.deployment.tag=$VERSION# обновляем на новую версию из nexus реппозитория
     - sleep 30 # дебажим
     - helm list # дебажим
  

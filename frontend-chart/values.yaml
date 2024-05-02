@@ -2,7 +2,8 @@ frontend:
   deployment:
     replicas: 1
     revisionHistoryLimit: 15
-    image: gitlab.praktikum-services.ru:5050/std-024-12/dumplings-store/dumpling-frontend:latest
+    image: gitlab.praktikum-services.ru:5050/std-024-12/dumplings-store/dumpling-frontend
+    tag: latest
     imagePullPolicy: Always
     containerPort: 80
     volumeMounts:
