@@ -12,7 +12,8 @@ backend:
     revisionHistoryLimit: 15
     maxUnavailable: 1 #максимальное количество одновременно неработающих Pod'ов в процессе обновления
     maxSurge: 20%
-    image: gitlab.praktikum-services.ru:5050/std-024-12/dumplings-store/dumpling-backend:latest
+    image: gitlab.praktikum-services.ru:5050/std-024-12/dumplings-store/dumpling-backend
+    tag: latest
     imagePullPolicy: Always # image извлекается всегда
     containerPort: 8081
     livenessProbe_path: /health

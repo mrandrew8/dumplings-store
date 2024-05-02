@@ -31,9 +31,10 @@ chart-deploy:
   script:   
     - ls # дебажим
     - echo ${VERSION} # дебажим
+    - export VERSION=${VERSION}
     # - cat ~/.kube/config # дебажим
     # - kubectl get namespaces
-    - helm upgrade --atomic --install backend-chart ${nexus_repo_url}backend-${VERSION}.tgz --namespace default --username=${nexus_user} --password=${nexus_pass}
+    - helm upgrade --atomic --install backend-chart ${nexus_repo_url}backend-${VERSION}.tgz --namespace default --username=${nexus_user} --password=${nexus_pass} --set backend.deployment.tag=$VERSION
     - sleep 30 # дебажим
     - helm list # дебажим
  
