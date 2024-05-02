@@ -76,7 +76,7 @@ release:
   before_script:
     - crane auth login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - crane tag $CI_REGISTRY_IMAGE/dumpling-frontend:$VERSION $VERSION
+    - crane tag $CI_REGISTRY_IMAGE/dumpling-frontend:$VERSION latest
   needs:
     - build-frontend-code-job
 
