@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment # тип сущности
+metadata: # метаданные
+  name: {{ .Chart.Name }}
+  labels:
+    app: {{ .Chart.Name }}
+spec:
+  replicas: {{  .Values.backend.deployment.replicas  }}
+  revisionHistoryLimit: {{  .Values.backend.deployment.revisionHistoryLimit  }}
+  # Стратегия развёртывания. Recreate — удалит сначала все старые Pod'ы 
+  # Есть и более гибкая стратегии, например, RollingUpdate, которая будет обновлять Pod'ы порциями  
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: {{  .Values.backend.deployment.maxUnavailable  }} #максимальное количество одновременно неработающих Pod'ов в процессе обновления
+      maxSurge: {{  .Values.backend.deployment.maxSurge  }} #максимальное количество Pod'ов, которое может быть создано сверх указанного количества Pod'ов
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{  .Values.backend.deployment.image  }} 
+          imagePullPolicy: Always # image извлекается всегда
+          ports:
+            - name: {{ .Chart.Name }}
+              containerPort: {{  .Values.backend.deployment.containerPort  }}
+          livenessProbe:
+            httpGet:
+              path: {{  .Values.backend.deployment.livenessProbe_path  }}
+              port: {{  .Values.backend.deployment.livenessProbe_port  }}
+            initialDelaySeconds: {{  .Values.backend.deployment.initialDelaySeconds  }}
+            periodSeconds: {{  .Values.backend.deployment.periodSeconds  }}
+            timeoutSeconds: {{  .Values.backend.deployment.timeoutSeconds  }}
+            failureThreshold: {{  .Values.backend.deployment.failureThreshold  }}
+      imagePullSecrets:
+       - name: docker-config-secret-backend
