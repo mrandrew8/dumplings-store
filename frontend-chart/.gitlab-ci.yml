@@ -10,14 +10,14 @@ chart-realise:
   stage: realise
   only:
     changes: 
-    - frontend-chart/**/* #триггер для запуска пайплайна - изменения в директории kubernetes (рекурссивно)
-  image: alpine/helm:3.13.2
+    - frontend-chart/**/* #триггер для запуска пайплайна - изменения в директории frontend-chart (рекурссивно)
+  image: alpine/helm:3.13.2 
   script:   
-    - ls
-    - helm package frontend-chart --version ${VERSION}
-    - echo ${VERSION}
-    - ls
-    - curl -u std-024-12:E5h3x9Xk https://nexus.praktikum-services.tech/repository/dumplings_store_nikolaev/ --upload-file frontend-${VERSION}.tgz
+    - ls # дебажим
+    - helm package frontend-chart --version ${VERSION} # упаковка в архив
+    - echo ${VERSION} # дебажим
+    - ls # дебажим
+    - curl -u ${nexus_user}:${nexus_pass} ${nexus_repo_url} --upload-file frontend-${VERSION}.tgz # загружаем архив в нексус реппозиторий
 
 
 
@@ -25,29 +25,29 @@ chart-deploy:
   stage: deploy
   only:
     changes: 
-    - frontend-chart/**/* #триггер для запуска пайплайна - изменения в директории kubernetes (рекурссивно)
+    - frontend-chart/**/* #триггер для запуска пайплайна - изменения в директории frontend-chart (рекурссивно)
   image: alpine/helm:3.13.2
   before_script:
     - mkdir -p ~/.kube/
-    - echo "$kubeconfig" | base64 -d >> ~/.kube/config #создаем конфиг куба из меременной гитлаба
-    - echo "$kube_cert" | base64 -d >> ~/.kube/ca.pem
+    - echo "$kubeconfig" | base64 -d >> ~/.kube/config #создаем конфиг куба из переменной гитлаба kubeconfig
+    - echo "$kube_cert" | base64 -d >> ~/.kube/ca.pem #создаем серт из переменной гитлаба kube_cert
     - chmod -R 700 ~/.kube
     - cat ~/.kube/config
-    - export KUBECONFIG=~/.kube/config
+    - export KUBECONFIG=~/.kube/config #указываем путь до куб конфига
   script:   
-    - ls 
-    - echo ${VERSION}
-    - cat ~/.kube/config
+    - ls # дебажим
+    - echo ${VERSION} # дебажим
+    - cat ~/.kube/config # дебажим
     # - kubectl get namespaces
-    - helm upgrade --atomic --install frontend-chart https://nexus.praktikum-services.tech/repository/dumplings_store_nikolaev/frontend-${VERSION}.tgz --namespace default --username=std-024-12 --password=E5h3x9Xk
-    - sleep 30
-    - helm list
+    - helm upgrade --atomic --install frontend-chart ${nexus_repo_url}frontend-${VERSION}.tgz --namespace default --username=${nexus_user} --password=${nexus_pass} # обновляем на новую версию из nexus реппозитория
+    - sleep 30 # дебажим
+    - helm list # дебажим
  
 
 telegram-notification-frontend: #задача с именем telegram-notification-frontend
   variables:
       TEXT: "Андрей Николаев собрал helm chart frontend-chart ${CI_PROJECT_URL}/-/jobs/${PREV_JOB_ID}/artifacts/download" #обьявление перменных, где ci_project_url - урл проекта, prev_job_id - переменная, обявленная в джобе build-backend-code-job и сохраненная в {CI_PROJECT_DIR}/build.env
-      TLGRM: "https://api.telegram.org/bot5933756043:AAE8JLL5KIzgrNBeTP5e-1bkbJy4YRoeGjs/sendMessage"
+      TLGRM: ${TLGRM}
   stage: notify #этап уведомлений
   only:
     changes:
