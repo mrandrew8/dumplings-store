@@ -3,8 +3,8 @@ stages:
   - deploy
   - notify
 
-variables:
-  VERSION: 1.0.${CI_PIPELINE_ID} # добавил перменную версия
+# variables:
+#   VERSION: 1.0.${CI_PIPELINE_ID} # добавил перменную версия
 
 chart-realise:
   stage: realise
