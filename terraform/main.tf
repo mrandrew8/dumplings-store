@@ -42,6 +42,11 @@ module "tf-yc-static-public-ip" {
   source = "./modules/tf-yc-static-public-ip"
 } 
 
+module "tf-yc-storage-bucket" {
+  source = "./modules/tf-yc-storage-bucket"
+}
+
+
 
 
 
