@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: {{  .Values.backend.deployment.image  }} 
+          image: {{  .Values.backend.deployment.image  }}:{{  .Values.backend.deployment.tag  }}
           imagePullPolicy: Always # image извлекается всегда
           ports:
             - name: {{ .Chart.Name }}
