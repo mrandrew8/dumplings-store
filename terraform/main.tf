@@ -46,6 +46,14 @@ module "tf-yc-storage-bucket" {
   source = "./modules/tf-yc-storage-bucket"
 }
 
+data "aws_iam_access_key" "example" {
+  user_name = "s3-service-account"
+}
+
+output "secret_access_key" {
+  value = data.aws_iam_access_key.example.secret
+}
+
 
 
 
