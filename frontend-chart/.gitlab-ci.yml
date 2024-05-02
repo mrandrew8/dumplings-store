@@ -8,9 +8,6 @@ variables:
 
 chart-realise:
   stage: realise
-  only:
-    changes: 
-    - frontend-chart/**/* #триггер для запуска пайплайна - изменения в директории frontend-chart (рекурссивно)
   image: alpine/helm:3.13.2 
   script:   
     - ls # дебажим
@@ -23,9 +20,6 @@ chart-realise:
 
 chart-deploy:
   stage: deploy
-  only:
-    changes: 
-    - frontend-chart/**/* #триггер для запуска пайплайна - изменения в директории frontend-chart (рекурссивно)
   image: alpine/helm:3.13.2
   before_script:
     - mkdir -p ~/.kube/
@@ -50,8 +44,6 @@ telegram-notification-frontend: #задача с именем telegram-notificat
       TLGRM: ${TLGRM}
   stage: notify #этап уведомлений
   only:
-    changes:
-    - frontend-chart/**/* #только для изменений в директории frontend
     variables: #РАСКОМЕНТИТЬ НЕ ЗАБУДЬ ЭТУ СТРОКУ И СЛЕДУЮЩУЮ!!!!!!!!!!!!
     - $CI_COMMIT_MESSAGE =~ /send notification/ # только для изменений содержащих в сообщении коммита "send notification"
   script:
