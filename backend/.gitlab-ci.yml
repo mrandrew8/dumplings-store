@@ -16,7 +16,7 @@ build-backend-code-job: #задача с именем build-backend-code-job
   stage: build
   rules:
     - changes: 
-      - backend/* #только для изменений в директории backend
+      - backend/**/* #только для изменений в директории backend
   image:
     name: gcr.io/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]
@@ -47,14 +47,15 @@ sonarqube-backend-sast:
   image: sonarsource/sonar-scanner-cli:latest #образ
   script:
     - cd backend
+    # прописываем переменные для sonarqube
     - sonar-scanner
-      -Dsonar.projectName="std-024-12-backend"
-      -Dsonar.host.url="https://sonarqube.praktikum-services.ru"
-      -Dsonar.login="4fbb7c1f4cd686637001210cdf5138d39e32a407"
-      -Dsonar.projectKey="std-024-12-backend"
-      -Dsonar.qualitygate.wait=true #параметры
+      -Dsonar.projectName=${sonar_projectName_backend}
+      -Dsonar.host.url=${sonar_host_url}
+      -Dsonar.login=${sonar_login_backend}
+      -Dsonar.projectKey=${sonar_projectKey_backend}
+      -Dsonar.qualitygate.wait=true # если проверка код не соответсвует quality gates, обрываем пайп
   needs:
-    - build-backend-code-job
+    - build-backend-code-job # прописываем зависимость от джоба с именем build-backend-code-job
 
 
 release:
@@ -76,7 +77,7 @@ release:
 telegram-notification-backend: #задача с именем telegram-notification-backend
   variables:
       TEXT: "Андрей Николаев собрал backend ${CI_PROJECT_URL}/-/jobs/${PREV_JOB_ID}/artifacts/download" #обьявление перменных, где ci_project_url - урл проекта, prev_job_id - переменная, обявленная в джобе build-backend-code-job и сохраненная в {CI_PROJECT_DIR}/build.env
-      TLGRM: "https://api.telegram.org/bot5933756043:AAE8JLL5KIzgrNBeTP5e-1bkbJy4YRoeGjs/sendMessage"
+      TLGRM: ${TLGRM}
   stage: notify #этап уведомлений
   only:
     changes:

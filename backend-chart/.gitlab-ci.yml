@@ -1,0 +1,64 @@
+stages: 
+  - realise
+  - deploy
+  - notify
+
+variables:
+  VERSION: 1.0.${CI_PIPELINE_ID} # добавил перменную версия
+
+chart-realise:
+  stage: realise
+  only:
+    changes: 
+    - backend-chart/**/* #триггер для запуска пайплайна - изменения в директории backend-chart (рекурссивно)
+  image: alpine/helm:3.13.2
+  script:   
+    - ls # дебажим
+    - helm package backend-chart --version ${VERSION} # упаковка в архив
+    - echo ${VERSION} # дебажим
+    - ls # дебажим
+    - curl -u ${nexus_user}:${nexus_pass} ${nexus_repo_url} --upload-file backend-${VERSION}.tgz # загружаем архив в нексус реппозиторий
+
+
+
+chart-deploy:
+  stage: deploy
+  only:
+    changes: 
+    - backend-chart/**/* #триггер для запуска пайплайна - изменения в директории backend-chart (рекурссивно)
+  image: alpine/helm:3.13.2
+  before_script:
+    - mkdir -p ~/.kube/
+    - echo "$kubeconfig" | base64 -d >> ~/.kube/config #создаем конфиг куба из переменной гитлаба kubeconfig
+    - echo "$kube_cert" | base64 -d >> ~/.kube/ca.pem #создаем серт из переменной гитлаба kube_cert
+    - chmod -R 700 ~/.kube
+    - cat ~/.kube/config
+    - export KUBECONFIG=~/.kube/config #указываем путь до куб конфига
+  script:   
+    - ls # дебажим
+    - echo ${VERSION} # дебажим
+    # - cat ~/.kube/config # дебажим
+    # - kubectl get namespaces
+    - helm upgrade --atomic --install backend-chart ${nexus_repo_url}backend-${VERSION}.tgz --namespace default --username=${nexus_user} --password=${nexus_pass}
+    - sleep 30 # дебажим
+    - helm list # дебажим
+ 
+
+telegram-notification-backend: #задача с именем telegram-notification-backend
+  variables:
+      TEXT: "Андрей Николаев собрал helm chart backend-chart ${CI_PROJECT_URL}/-/jobs/${PREV_JOB_ID}/artifacts/download" #обьявление перменных, где ci_project_url - урл проекта, prev_job_id - переменная, обявленная в джобе build-backend-code-job и сохраненная в {CI_PROJECT_DIR}/build.env
+      TLGRM: ${TLGRM}
+  stage: notify #этап уведомлений
+  only:
+    changes:
+    - backend-chart/**/* #только для изменений в директории backend-chart
+    variables: #РАСКОМЕНТИТЬ НЕ ЗАБУДЬ ЭТУ СТРОКУ И СЛЕДУЮЩУЮ!!!!!!!!!!!!
+    - $CI_COMMIT_MESSAGE =~ /send notification/ # только для изменений содержащих в сообщении коммита "send notification"
+  script:
+     # - echo "The BACK_CI_JOB_ID is ${CI_PROJECT_DIR}" - проверки, при помощи которых опредлял CI_PROJECT_DIR
+     # - echo "The BACK_CI_JOB_ID is $PREV_JOB_ID" - проверки, при помощи которых я определял, что записано в переменную prev_job_id
+      - 'curl -X POST -H "Content-type: application/json" --data "{\"chat_id\": \"-1002134018008\", \"text\": \"${TEXT}\" }" ${TLGRM}' #отправка курлом сообщения методом post
+     # - ls -lah - дополнительные проверки
+     # - pwd - дополнительные проверки
+
+
