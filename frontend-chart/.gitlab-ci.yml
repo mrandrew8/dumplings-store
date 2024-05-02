@@ -3,14 +3,11 @@ stages:
   - deploy
   - notify
 
-variables:
-  VERSION: 1.0.${CI_PIPELINE_ID} # добавил перменную версия
+# variables:
+#   VERSION: 1.0.${CI_PIPELINE_ID} # добавил перменную версия
 
 chart-realise:
   stage: realise
-  only:
-    changes: 
-    - frontend-chart/**/* #триггер для запуска пайплайна - изменения в директории frontend-chart (рекурссивно)
   image: alpine/helm:3.13.2 
   script:   
     - ls # дебажим
@@ -23,9 +20,6 @@ chart-realise:
 
 chart-deploy:
   stage: deploy
-  only:
-    changes: 
-    - frontend-chart/**/* #триггер для запуска пайплайна - изменения в директории frontend-chart (рекурссивно)
   image: alpine/helm:3.13.2
   before_script:
     - mkdir -p ~/.kube/
@@ -37,9 +31,10 @@ chart-deploy:
   script:   
     - ls # дебажим
     - echo ${VERSION} # дебажим
-    - cat ~/.kube/config # дебажим
+    - export VERSION=${VERSION}
+    # - cat ~/.kube/config # дебажим
     # - kubectl get namespaces
-    - helm upgrade --atomic --install frontend-chart ${nexus_repo_url}frontend-${VERSION}.tgz --namespace default --username=${nexus_user} --password=${nexus_pass} # обновляем на новую версию из nexus реппозитория
+    - helm upgrade --atomic --install frontend-chart ${nexus_repo_url}frontend-${VERSION}.tgz --namespace default --username=${nexus_user} --password=${nexus_pass} --set frontend.deployment.tag=$VERSION # обновляем на новую версию из nexus реппозитория
     - sleep 30 # дебажим
     - helm list # дебажим
  
@@ -50,8 +45,6 @@ telegram-notification-frontend: #задача с именем telegram-notificat
       TLGRM: ${TLGRM}
   stage: notify #этап уведомлений
   only:
-    changes:
-    - frontend-chart/**/* #только для изменений в директории frontend
     variables: #РАСКОМЕНТИТЬ НЕ ЗАБУДЬ ЭТУ СТРОКУ И СЛЕДУЮЩУЮ!!!!!!!!!!!!
     - $CI_COMMIT_MESSAGE =~ /send notification/ # только для изменений содержащих в сообщении коммита "send notification"
   script:
