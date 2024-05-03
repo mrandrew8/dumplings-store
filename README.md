@@ -10,7 +10,8 @@
 1) Установка Terraform
 Скачиваем дистрибутив terraform_1.6.6_linux_amd64.zip из зеркала. Ссылка на зеркало https://hashicorp-releases.yandexcloud.net/terraform/1.6.6/
 После загрузки добавляем путь к папке, в которой находится исполняемый файл, в переменную PATH: export PATH=$PATH:/path/to/terraform
-Указываем источник установки провайдера, добавив следующую конфигурацию в файл ~/.terraformrc (если такого файла нет на вашей машине, его нужно создать):
+Указываем источник установки провайдера, добавив следующую конфигурацию в файл ~/.terraformrc (если такого файла нет на вашей машине, 
+его нужно создать):
 provider_installation {
   network_mirror {
     url = "https://terraform-mirror.yandexcloud.net/"
@@ -29,13 +30,14 @@ curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
 
 Аутентифицируемся с помощью аккаунта на Яндекс
 Получаем OAuth-токен в сервисе Яндекс ID https://yandex.ru/dev/id/doc/ru/concepts/ya-oauth-intro
-Перейдем по ссылке https://oauth.yandex.ru/authorize?response_type=token&client_id=1a6990aa636648e9b2ef855fa7bec2fb. Если приложение запрашивает доступ к данным, разрешаем. Это нужно для получения токена.
-Копируем в буфер обмена или сохраняем полученный токен.
+Перейдем по ссылке https://oauth.yandex.ru/authorize?response_type=token&client_id=1a6990aa636648e9b2ef855fa7bec2fb. Если приложение 
+запрашивает доступ к данным, разрешаем. Это нужно для получения токена.Копируем в буфер обмена или сохраняем полученный токен.
 
 Если вы аутентифицируетесь впервые, перейдите в консоль облака. Примите условия лицензионного соглашения и политики конфиденциальности.
 
 Чтобы начать настройку профиля CLI, выполняем команду: yc init
-Выберите профиль, для которого вы хотите настроить аутентификацию, или создайте новый. Если вы выполняете команду yc init впервые, этот шаг будет отсутствовать. 
+Выберите профиль, для которого вы хотите настроить аутентификацию, или создайте новый. Если вы выполняете команду yc init впервые, 
+этот шаг будет отсутствовать. 
 Мы же выбираем создание нового профиля "Create a new profile":
 Pick desired action:
 [1] Re-initialize this profile 'default' with new settings
@@ -105,7 +107,8 @@ YC_FOLDER_ID — идентификатор каталога.
 
 3) Создание ресурсов в Yandex Cloud
 
-На странице Yandex Cloud Billing убедитесь, что у вас подключен платежный аккаунт, и он находится в статусе ACTIVE или TRIAL_ACTIVE. Если платежного аккаунта нет, создайте его. Если у вас еще нет каталога, создайте его. 
+На странице Yandex Cloud Billing убедитесь, что у вас подключен платежный аккаунт, и он находится в статусе ACTIVE или TRIAL_ACTIVE.
+Если платежного аккаунта нет, создайте его. Если у вас еще нет каталога, создайте его. 
 Мы же будем использовать дефолтный каталог (default).
 
 Ниже приведенеы описания модулей Terraform
@@ -124,9 +127,13 @@ module "tf-yc-storage-bucket"
 3.1) module "tf-yc-network" - создание сервисного аккаунта k8s-account
 От имени этого сервисного аккаунта будут создаваться ресурсы, необходимые кластеру Managed Service for Kubernetes.
 Создаем согласно документации https://yandex.cloud/ru/docs/managed-kubernetes/operations/kubernetes-cluster/kubernetes-cluster-create#tf_1 сервисный аккаунт с ролями: k8s.clusters.agent, vpc.publicAdmin, container-registry.images.puller, kms.keys.encrypterDecrypter, editor, load-balancer.admin.
-Роль k8s.clusters.agent — специальная роль для сервисного аккаунта кластера Kubernetes. Дает право на создание групп узлов, дисков, внутренних балансировщиков. Позволяет использовать заранее созданные ключи Yandex Key Management Service для шифрования и расшифровки секретов, а также подключать заранее созданные группы безопасности. 
+Роль k8s.clusters.agent — специальная роль для сервисного аккаунта кластера Kubernetes. Дает право на создание групп узлов, дисков, 
+внутренних балансировщиков. Позволяет использовать заранее созданные ключи Yandex Key Management Service для шифрования и расшифровки секретов,
+ а также подключать заранее созданные группы безопасности. 
 В комбинации с ролью load-balancer.admin позволяет создать сетевой балансировщик нагрузки с публичным IP-адресом.
-Роль vpc.publicAdmin позволяет управлять NAT-шлюзами, публичными IP-адресами и внешней сетевой связностью, а также просматривать информацию о квотах, ресурсах и операциях с ресурсами сервиса. Роль предоставляет права администратора мультиинтерфейсных ВМ, обеспечивающих связность между несколькими сетями.
+Роль vpc.publicAdmin позволяет управлять NAT-шлюзами, публичными IP-адресами и внешней сетевой связностью, а также просматривать информацию 
+о квотах, ресурсах и операциях с ресурсами сервиса. Роль предоставляет права администратора мультиинтерфейсных ВМ, обеспечивающих связность
+ между несколькими сетями.
 Роль container-registry.images.puller позволяет скачивать Docker-образы, а также просматривать информацию о ресурсах сервиса (реестрах, Docker-образах, репозиториях).
 Роль kms.keys.encrypterDecrypter позволяет шифровать и расшифровывать данные, а также просматривать информацию о ключах. Включает все 
 права ролей kms.keys.encrypter и kms.keys.decrypter.
@@ -148,7 +155,8 @@ k8s-public-services включает в себяя набор следующих
 
 3.3) module "tf-yc-kms-symmetric-key" - создание ключа шифрования Key Management Service kms-key
 Секрет — конфиденциальная информация, используемая кластером Kubernetes при управлении подами, например, OAuth-ключи, пароли, SSH-ключи и т. д. 
-По умолчанию Kubernetes хранит секреты в открытом виде. Для защиты секретов сервис Managed Service for Kubernetes позволяет шифровать их с помощью ключей шифрования из сервиса Yandex Key Management Service. 
+По умолчанию Kubernetes хранит секреты в открытом виде. Для защиты секретов сервис Managed Service for Kubernetes позволяет шифровать их с
+помощью ключей шифрования из сервиса Yandex Key Management Service. 
 Для работы с ключами используется механизм Key Management Service-провайдеров Kubernetes.
 Managed Service for Kubernetes использует для шифрования и расшифровки ключей Key Management Service-плагин. Секреты шифруются стандартными средствами Kubernetes.
 
@@ -201,7 +209,8 @@ server {
 
 Директива listen 80; указывает на то, что сервер будет прослушивать запросы на порту 80, что является стандартным портом для HTTP-серверов.
 
-Настройка корневой директории и обработки запросов: В блоке location / указывается корневая директория для обработки запросов, а также устанавливается индексный файл index.html. Директива try_files $uri $uri/ /index.html; определяет, как сервер будет обрабатывать запросы, пытаясь сначала найти запрошенный файл, затем папку, и, если ничего не найдено, возвращая index.html.
+Настройка корневой директории и обработки запросов: В блоке location / указывается корневая директория для обработки запросов, а также устанавливается индексный файл index.html. Директива try_files $uri $uri/ /index.html; определяет, как сервер будет обрабатывать запросы, 
+пытаясь сначала найти запрошенный файл, затем папку, и, если ничего не найдено, возвращая index.html.
 
 Проксирование запросов для определенных путей: В блоке location ~ /(products|categories|orders|auth/whoami|metrics) указывается регулярное выражение для путей, по которым будет осуществляться проксирование запросов. В данном случае, запросы по путям /products, /categories, /orders, /auth/whoami и /metrics будут направляться на сервер с адресом http://dumpling-backend:8081 с помощью директивы proxy_pass.
 
@@ -227,9 +236,11 @@ module.exports = {
 
 ```bash
 
-Покупаем домен у любого провайдера, в нашем случае рег.ру и делегируем домен. Прописываем у регистратора сервера ns1.yandexcloud.net. и ns2.yandexcloud.net.
+Покупаем домен у любого провайдера, в нашем случае рег.ру и делегируем домен. Прописываем у регистратора сервера
+ ns1.yandexcloud.net. и ns2.yandexcloud.net.
 
-Установка Ingress-контроллера NGINX с менеджером для сертификатов Let's Encrypt производится согласно инструкции https://yandex.cloud/ru/docs/managed-kubernetes/tutorials/ingress-cert-manager#install-controller
+Установка Ingress-контроллера NGINX с менеджером для сертификатов Let's Encrypt производится согласно инструкции 
+https://yandex.cloud/ru/docs/managed-kubernetes/tutorials/ingress-cert-manager#install-controller
 
 Предварительные действия:
 Устанавливаем хелм. Ссылка на инструкцию: https://helm.sh/ru/docs/intro/install/
@@ -248,7 +259,7 @@ helm install ingress-nginx ingress-nginx/ingress-nginx --set controller.service.
 УСтанавливаем версию 1.12.1 менеджера сертификатов, настроенного для выпуска сертификатов от Let's Encrypt®. 
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.1/cert-manager.yaml
 
-Убедился, что в пространстве имен cert-manager создано три пода с готовностью 1/1 и статусом Running:
+Убеждаемся, что в пространстве имен cert-manager создано три пода с готовностью 1/1 и статусом Running:
 kubectl get pods -n cert-manager --watch
 Результат:
 
@@ -257,7 +268,7 @@ cert-manager-69********-ghw6s             1/1    Running  0         54s
 cert-manager-cainjector-76********-gnrzz  1/1    Running  0         55s
 cert-manager-webhook-77********-wz9bh     1/1    Running  0         54s
 
-Создал YAML-файл /kubernetes/acme-issuer.yaml с манифестом объекта ClusterIssuer:
+Соаздем YAML-файл /kubernetes/acme-issuer.yaml с манифестом объекта ClusterIssuer:
 
 kubectl apply -f acme-issuer.yaml
 
@@ -290,7 +301,8 @@ Events:
 Сертификаты используются в связке с соответствующими им секретами Kubernetes, которые хранят пары ключей и служебную информацию. 
 В случае отсутствия секрета сертификат перевыпускается автоматически с созданием нового секрета, о чем и сообщается в событиях. 
 
-Поскольку сертификат выпускается впервые, то соответствующий ему секрет отсутствует. Наличие событий, сообщающих об этом, не является ошибкой.
+Поскольку сертификат выпускается впервые, то соответствующий ему секрет отсутствует. 
+Наличие событий, сообщающих об этом, не является ошибкой.
 
 Примечание: Проверка прав на домен сертификата Let's Encrypt® может занять несколько часов.
 
@@ -323,23 +335,23 @@ Commercial support is available at
 </body>
 </html>
 
-Примечание: Если ресурс недоступен по указанному URL, то убедитесь, что группы безопасности для кластера Managed Service for Kubernetes 
-и его групп узлов настроены корректно. Если отсутствует какое-либо из правил — добавьте его.
+Примечание: Если ресурс недоступен по указанному URL, то убедитесь, что группы безопасности для кластера
+Managed Service for Kubernetes и его групп узлов настроены корректно. 
+Если отсутствует какое-либо из правил — добавьте его.
 
 ```
 
 
 
-## CI/CD
+## SonarQube
 ```bash
 
-
-1) SonarQube 
-
 Создаем проект в sonarqube по ссылке https://sonarqube.praktikum-services.ru/projects/favorite :
-add project - указываем Project key и Display name - генерируем token - выбираем вариант, описывающий нашу сборку (и для frontend и для backend выбираем other) - выбираем OS Linux.
+add project - указываем Project key и Display name - генерируем token - выбираем вариант, описывающий нашу сборку (и для frontend 
+и для backend выбираем other) - выбираем OS Linux.
 
-Получили команду для выполнения анализа средствами SonarQube, которую вставляем в секцию скрипт задания sonarqube-backend(frontend)-sast. Для безопасност сохраняем значения переменных в gitlab variables, а команду параметризуем
+Получили команду для выполнения анализа средствами SonarQube, которую вставляем в секцию скрипт задания sonarqube-backend(frontend)-sast. 
+Для безопасност сохраняем значения переменных в gitlab variables, а команду параметризуем
 
 Пример команды: 
 sonar-scaner \
@@ -349,14 +361,21 @@ sonar-scaner \
   -Dsonar.login=89138e3474346e0b22362874383a0.....
 
 
-2) Создание статического файла конфигурации
+```
 
-Для получения доступ к кластеру Managed Service for Kubernetes без использования CLI, нам потребуется создание статического файла конфигурации.
+## CI/CD
+```bash
+
+1) Создание статического файла конфигурации
+
+Для получения доступ к кластеру Managed Service for Kubernetes без использования CLI, нам потребуется создание статического 
+файла конфигурации.
 
 Получите уникальный идентификатор кластера из Yandex Cloud и помещяем его в переменную:
 CLUSTER_ID=catb3ppsdsh7********
 
-Подготавливаем сертификат кластера и сохраняем сертификат кластера управляемой службы для Kubernetes в файл с именем ca.pem. Этот сертификат подтверждает подлинность управляемой службы для кластера Kubernetes.
+Подготавливаем сертификат кластера и сохраняем сертификат кластера управляемой службы для Kubernetes в файл с именем ca.pem. 
+Этот сертификат подтверждает подлинность управляемой службы для кластера Kubernetes.
 
 Запускаем команду, которая:
 Получает информацию об управляемой службе для кластера Kubernetes в формате JSON.
@@ -371,7 +390,8 @@ yc managed-kubernetes cluster get --id $CLUSTER_ID --format json | \
 Примечание: Потребуется установка jq. Установить можно так: sudo apt install jq
 
 
-Создаем объект ServiceAccount для взаимодействия с API Kubernetes внутри кластера управляемой службы для Kubernetes. Спецификация создания ServiceAccount объекта и его секрета сохраняем в /kubernetes/serviceaccount2.yaml
+Создаем объект ServiceAccount для взаимодействия с API Kubernetes внутри кластера управляемой службы для Kubernetes. 
+Спецификация создания ServiceAccount объекта и его секрета сохраняем в /kubernetes/serviceaccount2.yaml
 
 Выполняем: kubectl create -f serviceaccount2.yaml
 
@@ -389,7 +409,8 @@ SA_TOKEN=$(kubectl -n kube-system get secret $(kubectl -n kube-system get secret
   base64 -d)
 
 
-Получаем IP-адрес кластера управляемой службы для кластера Kubernetes и добавляем его в MASTER_ENDPOINT переменную для дальнейшего использования.
+Получаем IP-адрес кластера управляемой службы для кластера Kubernetes и добавляем его в MASTER_ENDPOINT переменную 
+для дальнейшего использования.
 
 Запускаем команду, которая:
 Получает сведения об управляемой службе для кластера Kubernetes в формате JSON на основе его уникального идентификатора.
@@ -431,28 +452,32 @@ default  Active  9d
 
 Сохраняем значение из файлика ca.pem и test.kubeconfig в gitlab Variables kube_cert и kubeconfig соответственно.
 
-4) Создание реппозитория в Nexus для хранения архивов Helm чартов
+2) Создание реппозитория в Nexus для хранения архивов Helm чартов
 
 Переходим по ссылке: https://nexus.praktikum-services.tech/
 Создаем новый реппозиторий: create reppository - выбираем тип helm(hosted) - задем имя реппозитория и жмем create reppository.
 Реппозиторий создан. Для получения доступа к реппозиторию Nexus из CI/CD сохраняем следующие переменные в gitlab variables:
-nexus_pass = <наш пароль от нексус>, nexus_repo_url = https://nexus.praktikum-services.tech/repository/dumplings_store_nikolaev/ , nexus_user = <наш логин от нексус>
+nexus_pass = <наш пароль от нексус>, nexus_repo_url = https://nexus.praktikum-services.tech/repository/dumplings_store_nikolaev/ ,
+ nexus_user = <наш логин от нексус>
 
 
 
-5) Описание конфигов CI/CD
+3) Описание конфигов CI/CD
 
 Создаем в корне проекта .gitlab-ci.yaml конфигурационный файл для определения процесса непрерывной интеграции и поставки (CI/CD).
 Так же создаем .gitlab-ci.yaml в директориях backend, frontend, backend-chart, frontend-chart. И включаем их в родительский корневой .gitlab-ci.yml.
 
 .gitlab-ci.yaml в директориях backend, frontend состоит из 4 этапов: build, test, release, notify.
 
-- build-backend(frontend)-code-job - здесь происходит сборка приложения при помощи контейнера с образом gcr.io/kaniko-project/executor:v1.9.0-debug(по технологии docker-in-docker)
+- build-backend(frontend)-code-job - здесь происходит сборка приложения при помощи контейнера с образом 
+gcr.io/kaniko-project/executor:v1.9.0-debug(по технологии docker-in-docker)
 - sonarqube-backend(frontend)-sast - проверка кода бэкенда(фронтенда) на соответсвие quality gates заданным в sonarqube
 - backend-test (только для backend)- задание для запуска тестов на GO. Для того чтобы проверка не валила пайплайн отключаем CGO_ENABLED=0.
 - release - тегирование образа и его загрука в gitlab-registry происходит в контейнере с образом gcr.io/go-containerregistry/crane:debug.
-- telegram-notification-backend(frontend) - уведомление в чат телеграмм о выходе новой версии приложения, при условии, что в сообщении коммита мы прописали "sent notification"
-Дополнительно добавляем этап проверки кода из коллекций GitLab Auto DevOps. Подключаем шаблон Security/SAST.gitlab-ci.yml, добавляя следующий код:
+- telegram-notification-backend(frontend) - уведомление в чат телеграмм о выходе новой версии приложения, при условии, что в сообщении 
+коммита мы прописали "sent notification"
+Дополнительно добавляем этап проверки кода из коллекций GitLab Auto DevOps. Подключаем шаблон Security/SAST.gitlab-ci.yml, 
+добавляя следующий код:
 
 include:
   - template: Security/SAST.gitlab-ci.yml 
@@ -464,7 +489,8 @@ include:
 - chart-realise - упаковка helm chart в архив  загрузка в nexus репозиторий при помощи curl
 - chart-deploy - деплой приложения в кубернетес. Архив скачивается из nexus репозитория:
 helm upgrade --atomic --install backend-chart ${nexus_repo_url}backend-${VERSION}.tgz --namespace default --username=${nexus_user} --password=${nexus_pass} --set backend.deployment.tag=$VERSION
-- telegram-notification-backend(frontend) - уведомление в чат телеграмм о выходе новой версии приложения, при условии, что в сообщении коммита мы прописали "sent notification"
+- telegram-notification-backend(frontend) - уведомление в чат телеграмм о выходе новой версии приложения, при условии, 
+что в сообщении коммита мы прописали "sent notification"
 
 
 backend-chart содержит в себе шаблоны следующих объектов: deployment, secret, service.
@@ -490,7 +516,8 @@ VERSION=$CI_PIPLINE_ID
 /backend-chart/.gitlab-ci.yml
 /frontend-chart/.gitlab-ci.yml
 
-При установке чарта перменная приложения передается команде helm upgrade при помощи параметра --set backend(frontend).deployment.tag=$VERSION, а для самого чарта указывается следующим образом: ${nexus_repo_url}backend-${VERSION}.tgz.
+При установке чарта перменная приложения передается команде helm upgrade при помощи параметра --set backend(frontend).deployment.tag=$VERSION,
+а для самого чарта указывается следующим образом: ${nexus_repo_url}backend-${VERSION}.tgz.
 
 Соответственно, при деплое не используется tag latest ни для приложения ни для helm charta.
 
@@ -502,7 +529,8 @@ VERSION=$CI_PIPLINE_ID
 
 ```bash
 Кртинки пельмешек и состояние terraform.tfstate хранятся в S3 bucket
-Ссылки на картинки получаем в веб интерфейсе Yandex Cloud (срок жизни ссылок можно менть, мы указываем 15 дней). Меняем ссылки картинок нна те что в S3 в файлах backend\cmd\api\dependencies\store.go и \backend\cmd\api\app\app_test.go
+Ссылки на картинки получаем в веб интерфейсе Yandex Cloud (срок жизни ссылок можно менzть, мы указываем 15 дней). 
+Меняем ссылки картинок на те что в S3 в файлах backend\cmd\api\dependencies\store.go и \backend\cmd\api\app\app_test.go
 Cоздание бакета s3 описано в модуле "tf-yc-storage-bucket" описано.
 
 
